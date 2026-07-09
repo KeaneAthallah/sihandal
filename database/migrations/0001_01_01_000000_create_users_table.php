@@ -15,10 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('nip');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('skpd', 100)->nullable(); // SKPD/Unit Kerja code
+            $table->string('role')->default('user'); // Role: admin, user, etc.
             $table->rememberToken();
             $table->timestamps();
+
+            // Add indexes for better performance
+            $table->index('skpd');
+            $table->index('role');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

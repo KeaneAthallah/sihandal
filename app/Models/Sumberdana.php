@@ -29,12 +29,5 @@ class Sumberdana extends Model
 
     protected $casts = [
         'pagu' => 'decimal:2',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
-
-    public function realisasi()
-    {
-        return $this->hasMany(Realisasi::class, 'id_smb', 'id');
-    }
 }

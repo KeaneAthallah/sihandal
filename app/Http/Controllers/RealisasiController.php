@@ -55,13 +55,13 @@ class RealisasiController extends Controller
             12 => 'Desember'
         ];
 
-        return view('realisasi.index', compact('realisasi', 'totalNilai', 'totalTransaksi', 'bulanAktif', 'bulanList'));
+        return view('admin.realisasi.index', compact('realisasi', 'totalNilai', 'totalTransaksi', 'bulanAktif', 'bulanList'));
     }
 
     public function create()
     {
         $sumberDana = Sumberdana::orderBy('kd_skpd')->get();
-        return view('realisasi.create', compact('sumberDana'));
+        return view('admin.realisasi.create', compact('sumberDana'));
     }
 
     public function store(Request $request)
@@ -87,14 +87,14 @@ class RealisasiController extends Controller
 
         Realisasi::create($request->all());
 
-        return redirect()->route('realisasi.index')
+        return redirect()->route('admin.realisasi.index')
             ->with('success', 'Data realisasi belanja berhasil ditambahkan.');
     }
 
     public function edit(Realisasi $realisasi)
     {
         $sumberDana = Sumberdana::orderBy('kd_skpd')->get();
-        return view('realisasi.edit', compact('realisasi', 'sumberDana'));
+        return view('admin.realisasi.edit', compact('realisasi', 'sumberDana'));
     }
 
     public function update(Request $request, Realisasi $realisasi)
@@ -120,7 +120,7 @@ class RealisasiController extends Controller
 
         $realisasi->update($request->all());
 
-        return redirect()->route('realisasi.index')
+        return redirect()->route('admin.realisasi.index')
             ->with('success', 'Data realisasi belanja berhasil diperbarui.');
     }
 
@@ -128,7 +128,7 @@ class RealisasiController extends Controller
     {
         $realisasi->delete();
 
-        return redirect()->route('realisasi.index')
+        return redirect()->route('admin.realisasi.index')
             ->with('success', 'Data realisasi belanja berhasil dihapus.');
     }
 }

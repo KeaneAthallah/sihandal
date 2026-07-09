@@ -33,12 +33,12 @@ class HeaderBelanjaController extends Controller
         $totalSP2D = $query->count();
         $totalUnit = $query->distinct('unit_skpd')->count('unit_skpd');
 
-        return view('header-belanja.index', compact('headerBelanja', 'totalBrutto', 'totalSP2D', 'totalUnit'));
+        return view('admin.header-belanja.index', compact('headerBelanja', 'totalBrutto', 'totalSP2D', 'totalUnit'));
     }
 
     public function create()
     {
-        return view('header-belanja.create');
+        return view('admin.header-belanja.create');
     }
 
     public function store(Request $request)
@@ -56,13 +56,13 @@ class HeaderBelanjaController extends Controller
 
         HeaderBelanja::create($request->all());
 
-        return redirect()->route('header-belanja.index')
+        return redirect()->route('admin.header-belanja.index')
             ->with('success', 'Data header belanja berhasil ditambahkan.');
     }
 
     public function edit(HeaderBelanja $headerBelanja)
     {
-        return view('header-belanja.edit', compact('headerBelanja'));
+        return view('admin.header-belanja.edit', compact('headerBelanja'));
     }
 
     public function update(Request $request, HeaderBelanja $headerBelanja)
@@ -80,7 +80,7 @@ class HeaderBelanjaController extends Controller
 
         $headerBelanja->update($request->all());
 
-        return redirect()->route('header-belanja.index')
+        return redirect()->route('admin.header-belanja.index')
             ->with('success', 'Data header belanja berhasil diperbarui.');
     }
 
@@ -88,7 +88,7 @@ class HeaderBelanjaController extends Controller
     {
         $headerBelanja->delete();
 
-        return redirect()->route('header-belanja.index')
+        return redirect()->route('admin.header-belanja.index')
             ->with('success', 'Data header belanja berhasil dihapus.');
     }
 }
