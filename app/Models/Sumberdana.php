@@ -25,9 +25,11 @@ class Sumberdana extends Model
         'nm_rek',
         'pagu',
         'sumberdana',
+        'pagu_percentage',
     ];
 
     protected $casts = [
         'pagu' => 'decimal:2',
+        'pagu_percentage' => 'decimal:2',
     ];
 }

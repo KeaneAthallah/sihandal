@@ -55,15 +55,33 @@ class SettingController extends Controller
             $percentage = $request->percentage;
             $applyToAll = $request->apply_to_all ?? false;
 
+            // Check if SKPD exists
+            $skpdExists = Sumberdana::where('kd_skpd', $kdSkpd)->exists();
+            if (!$skpdExists) {
+                DB::rollBack();
+                return redirect()->back()
+                    ->with('error', 'SKPD tidak ditemukan: ' . $kdSkpd);
+            }
+
             if ($applyToAll) {
                 // Apply percentage to all records of this SKPD
-                Sumberdana::where('kd_skpd', $kdSkpd)
+                $updated = Sumberdana::where('kd_skpd', $kdSkpd)
                     ->update(['pagu_percentage' => $percentage]);
+                
+                if ($updated === 0) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->with('error', 'Tidak ada data yang diperbarui untuk SKPD: ' . $kdSkpd);
+                }
             } else {
-                // Update only the first record (or you can specify which one)
-                Sumberdana::where('kd_skpd', $kdSkpd)
-                    ->limit(1)
-                    ->update(['pagu_percentage' => $percentage]);
+                // Update only the first record of this SKPD
+                $firstRecord = Sumberdana::where('kd_skpd', $kdSkpd)->first();
+                if (!$firstRecord) {
+                    DB::rollBack();
+                    return redirect()->back()
+                        ->with('error', 'Data SKPD tidak ditemukan: ' . $kdSkpd);
+                }
+                $firstRecord->update(['pagu_percentage' => $percentage]);
             }
 
             DB::commit();
@@ -91,15 +109,17 @@ class SettingController extends Controller
         try {
             DB::beginTransaction();
 
+            $updatedCount = 0;
             foreach ($request->settings as $setting) {
-                Sumberdana::where('kd_skpd', $setting['kd_skpd'])
+                $result = Sumberdana::where('kd_skpd', $setting['kd_skpd'])
                     ->update(['pagu_percentage' => $setting['percentage']]);
+                $updatedCount += $result;
             }
 
             DB::commit();
 
             return redirect()->route('admin.setting')
-                ->with('success', 'Semua setting persentase berhasil diperbarui');
+                ->with('success', "Semua setting persentase berhasil diperbarui ({$updatedCount} records)");
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
@@ -113,10 +133,10 @@ class SettingController extends Controller
     public function reset()
     {
         try {
-            Sumberdana::query()->update(['pagu_percentage' => 0]);
+            $updated = Sumberdana::query()->update(['pagu_percentage' => 0]);
 
             return redirect()->route('admin.setting')
-                ->with('success', 'Semua setting persentase berhasil direset ke 0%');
+                ->with('success', "Semua setting persentase berhasil direset ke 0% ({$updated} records)");
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Gagal reset setting: ' . $e->getMessage());
@@ -136,10 +156,10 @@ class SettingController extends Controller
             $percentage = $request->percentage;
 
             // Apply percentage to all SKPD
-            Sumberdana::query()->update(['pagu_percentage' => $percentage]);
+            $updated = Sumberdana::query()->update(['pagu_percentage' => $percentage]);
 
             return redirect()->route('admin.setting')
-                ->with('success', "Setting persentase {$percentage}% berhasil diterapkan ke semua SKPD");
+                ->with('success', "Setting persentase {$percentage}% berhasil diterapkan ke semua SKPD ({$updated} records)");
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Gagal menerapkan persentase: ' . $e->getMessage());

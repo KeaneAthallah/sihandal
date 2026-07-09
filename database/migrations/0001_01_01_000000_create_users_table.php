@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('nip');
+            $table->string('nip')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('skpd', 100)->nullable(); // SKPD/Unit Kerja code

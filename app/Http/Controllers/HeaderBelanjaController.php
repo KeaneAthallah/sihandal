@@ -60,6 +60,11 @@ class HeaderBelanjaController extends Controller
             ->with('success', 'Data header belanja berhasil ditambahkan.');
     }
 
+    public function show(HeaderBelanja $headerBelanja)
+    {
+        return view('admin.header-belanja.show', compact('headerBelanja'));
+    }
+
     public function edit(HeaderBelanja $headerBelanja)
     {
         return view('admin.header-belanja.edit', compact('headerBelanja'));

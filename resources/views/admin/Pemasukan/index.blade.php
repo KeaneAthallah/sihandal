@@ -6,14 +6,14 @@
             {{-- Header --}}
             <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-800">Pengeluaran</h1>
-                    <p class="text-sm text-slate-500 mt-1">Kelola permintaan pengeluaran dana</p>
+                    <h1 class="text-2xl font-bold text-slate-800">Pemasukan</h1>
+                    <p class="text-sm text-slate-500 mt-1">Kelola permintaan pemasukan dana</p>
                 </div>
-                <a href="{{ route($pr . '.pengeluaran.create') }}" class="btn-primary text-sm">
+                <a href="{{ route($pr . '.pemasukan.create') }}" class="btn-primary text-sm">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Ajukan Pengeluaran
+                    Ajukan Pemasukan
                 </a>
             </div>
 
@@ -28,14 +28,14 @@
             {{-- Stats --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div class="card flex items-center gap-4">
-                    <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                     <div>
                         <p class="stat-label">Total</p>
-                        <p class="stat-value text-lg">Rp {{ number_format($pengeluarans->sum('jumlah'), 0, ',', '.') }}</p>
+                        <p class="stat-value text-lg">Rp {{ number_format($pemasukans->sum('jumlah'), 0, ',', '.') }}</p>
                     </div>
                 </div>
                 <div class="card flex items-center gap-4">
@@ -46,7 +46,7 @@
                     </div>
                     <div>
                         <p class="stat-label">Selesai</p>
-                        <p class="stat-value text-lg">{{ $pengeluarans->where('status', 'completed')->count() }}</p>
+                        <p class="stat-value text-lg">{{ $pemasukans->where('status', 'completed')->count() }}</p>
                     </div>
                 </div>
                 <div class="card flex items-center gap-4">
@@ -57,14 +57,14 @@
                     </div>
                     <div>
                         <p class="stat-label">Pending</p>
-                        <p class="stat-value text-lg">{{ $pengeluarans->where('status', 'pending')->count() }}</p>
+                        <p class="stat-value text-lg">{{ $pemasukans->where('status', 'pending')->count() }}</p>
                     </div>
                 </div>
             </div>
 
             {{-- Search & Filter --}}
             <div class="card mb-6">
-                <form method="GET" action="{{ route($pr . '.pengeluaran.index') }}" class="flex flex-wrap gap-3">
+                <form method="GET" action="{{ route($pr . '.pemasukan.index') }}" class="flex flex-wrap gap-3">
                     <div class="flex-1 min-w-[200px]">
                         <input type="text" name="search" placeholder="Cari SKPD, rekening, atau keterangan..."
                                value="{{ request('search') }}" class="input-field text-sm">
@@ -83,7 +83,7 @@
                     </div>
                     <button type="submit" class="btn-primary text-sm">Cari</button>
                     @if (request()->hasAny(['search', 'status']))
-                        <a href="{{ route($pr . '.pengeluaran.index') }}" class="btn-secondary text-sm">Reset</a>
+                        <a href="{{ route($pr . '.pemasukan.index') }}" class="btn-secondary text-sm">Reset</a>
                     @endif
                 </form>
             </div>
@@ -91,13 +91,13 @@
             {{-- Export Buttons (admin only) --}}
             @if (auth()->user()->role === 'admin')
                 <div class="flex gap-2 mb-6">
-                    <a href="{{ route('admin.pengeluaran.export-pdf') }}" class="btn-secondary text-sm" target="_blank">
+                    <a href="{{ route('admin.pemasukan.export-pdf') }}" class="btn-secondary text-sm" target="_blank">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                         </svg>
                         Export PDF
                     </a>
-                    <a href="{{ route('admin.pengeluaran.export-excel') }}" class="btn-secondary text-sm">
+                    <a href="{{ route('admin.pemasukan.export-excel') }}" class="btn-secondary text-sm">
                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -121,7 +121,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            @forelse ($pengeluarans as $item)
+                            @forelse ($pemasukans as $item)
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-5 py-4 text-sm text-slate-700">{{ $item->tanggal->format('d-m-Y') }}</td>
                                     <td class="px-5 py-4">
@@ -129,28 +129,28 @@
                                         <div class="text-xs text-slate-400">{{ $item->sumberdana->nm_rek ?? '' }}</div>
                                     </td>
                                     <td class="px-5 py-4 text-sm text-slate-600">{{ $item->user->name }}</td>
-                                    <td class="px-5 py-4 text-sm text-right font-semibold text-red-600">
+                                    <td class="px-5 py-4 text-sm text-right font-semibold text-emerald-700">
                                         Rp {{ number_format($item->jumlah, 2, ',', '.') }}
                                     </td>
                                     <td class="px-5 py-4 text-center">
-                                        <span class="badge {{ \App\Models\Pengeluaran::statusColor($item->status) }}">
-                                            {{ \App\Models\Pengeluaran::statusLabel($item->status) }}
+                                        <span class="badge {{ \App\Models\Pemasukan::statusColor($item->status) }}">
+                                            {{ \App\Models\Pemasukan::statusLabel($item->status) }}
                                         </span>
                                     </td>
                                     <td class="px-5 py-4 text-center">
                                         <div class="flex items-center justify-center gap-2">
-                                            <a href="{{ route($pr . '.pengeluaran.show', $item) }}"
+                                            <a href="{{ route($pr . '.pemasukan.show', $item) }}"
                                                class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">
                                                 Detail
                                             </a>
                                             @if ($item->status === 'pending' && $item->user_id === auth()->id())
-                                                <a href="{{ route($pr . '.pengeluaran.edit', $item) }}"
+                                                <a href="{{ route($pr . '.pemasukan.edit', $item) }}"
                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
                                                     Edit
                                                 </a>
                                             @endif
                                             @if (auth()->user()->role === 'admin' && in_array($item->status, ['pending', 'docs_1_uploaded', 'docs_2_uploaded']))
-                                                <form action="{{ route('admin.pengeluaran.approve', $item) }}" method="POST" class="inline-block">
+                                                <form action="{{ route('admin.pemasukan.approve', $item) }}" method="POST" class="inline-block">
                                                     @csrf
                                                     <button type="submit" onclick="return confirm('Setujui?')"
                                                             class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors">
@@ -159,13 +159,13 @@
                                                 </form>
                                             @endif
                                             @if (auth()->user()->role === 'admin' && $item->document_1_path)
-                                                <a href="{{ route('admin.pengeluaran.download-document', [$item, 1]) }}"
+                                                <a href="{{ route('admin.pemasukan.download-document', [$item, 1]) }}"
                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                                                     Dok.1
                                                 </a>
                                             @endif
                                             @if (auth()->user()->role === 'admin' && $item->document_2_path)
-                                                <a href="{{ route('admin.pengeluaran.download-document', [$item, 2]) }}"
+                                                <a href="{{ route('admin.pemasukan.download-document', [$item, 2]) }}"
                                                    class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                                                     Dok.2
                                                 </a>
@@ -179,7 +179,7 @@
                                         <svg class="mx-auto h-10 w-10 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                                         </svg>
-                                        <p class="text-sm">Belum ada data pengeluaran</p>
+                                        <p class="text-sm">Belum ada data pemasukan</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -187,7 +187,7 @@
                     </table>
                 </div>
                 <div class="px-5 py-4 bg-slate-50 border-t border-slate-100">
-                    {{ $pengeluarans->withQueryString()->links() }}
+                    {{ $pemasukans->withQueryString()->links() }}
                 </div>
             </div>
         </div>
