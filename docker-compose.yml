@@ -54,6 +54,8 @@ services:
     volumes:
       - ./public:/var/www/html/public:ro
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/ssl/sihandal.pem:/etc/ssl/certs/sihandal.pem:ro
+      - ./docker/ssl/sihandal-key.pem:/etc/ssl/private/sihandal-key.pem:ro
       - nginx_logs:/var/log/nginx
     depends_on:
       - app

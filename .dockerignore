@@ -8,7 +8,7 @@
 .env.production
 node_modules
 vendor
-public/build
+# public/build is built by Vite in Docker multi-stage build
 public/hot
 storage/app/public
 storage/logs

@@ -41,11 +41,11 @@ class SumberdanaImport implements ToModel, WithBatchInserts, WithChunkReading, S
     }
 
     /**
-     * Start from row 1 (first row is data, no header)
+     * Start from row 2 (skip CSV header row)
      */
     public function startRow(): int
     {
-        return 1;
+        return 2;
     }
 
     /**
